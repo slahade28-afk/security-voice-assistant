@@ -1,9 +1,4 @@
 
-      - name: Check APK file
-        run: |
-          echo "Checking for APK files..."
-          find . -name "*.apk" -type f
-          ls -la bin || true
 
 name: Build Security Assistant APK
 
@@ -44,8 +39,16 @@ jobs:
       - name: Build APK
         run: buildozer android debug
 
+      - name: Check APK file
+        if: always()
+        run: |
+          echo "Checking for APK files..."
+          find . -name "*.apk" -type f
+          ls -la bin || true
+
       - name: Save APK
         uses: actions/upload-artifact@v4
         with:
           name: security-assistant-apk
           path: bin/*.apk
+          if-no-files-found: error
