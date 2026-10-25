@@ -41,6 +41,7 @@ BoxLayout:
         on_release: app.respond("about")
 """
 
+
 class SecurityAssistant(App):
     def build(self):
         self.title = "Security Assistant"
@@ -70,20 +71,27 @@ class SecurityAssistant(App):
         if platform == "android":
             try:
                 from jnius import autoclass
+
                 activity = autoclass(
                     "org.kivy.android.PythonActivity"
                 ).mActivity
-                TextToSpeech = autoclass("android.speech.tts.TextToSpeech")
+                TextToSpeech = autoclass(
+                    "android.speech.tts.TextToSpeech"
+                )
                 Locale = autoclass("java.util.Locale")
 
                 if not hasattr(self, "tts"):
                     self.tts = TextToSpeech(activity, None)
 
                 self.tts.setLanguage(Locale("mr", "IN"))
-                self.tts.speak(message, 0, None, "security_message")
+                self.tts.speak(
+                    message, 0, None, "security_message"
+                )
             except Exception as error:
                 print("Voice error:", error)
         else:
             print("Assistant:", message)
 
+
 SecurityAssistant().run()
+
